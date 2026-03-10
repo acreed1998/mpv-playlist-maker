@@ -1,5 +1,5 @@
 from pathlib import Path
-from utils import VIDEO_FILE_EXTENSIONS
+from .constants import VIDEO_FILE_EXTENSIONS
 
 
 def getVideoFiles(directory: Path):

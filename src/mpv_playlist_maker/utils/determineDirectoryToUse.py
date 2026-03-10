@@ -1,5 +1,5 @@
 from pathlib import Path
-from utils import getFolderPath
+from .getFolderPath import getFolderPath
 
 
 def determineDirectoryToUse():

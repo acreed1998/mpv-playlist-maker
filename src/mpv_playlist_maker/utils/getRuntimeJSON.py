@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from utils import RUNTIME_FILENAME, writeJSONToFile, readJSONFromFile
+from .constants import RUNTIME_FILENAME
+from .jsonManipulation import writeJSONToFile, readJSONFromFile
 
 
 def getRuntimeJSON():

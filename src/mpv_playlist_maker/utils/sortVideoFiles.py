@@ -1,6 +1,6 @@
 from pathlib import Path
 import random
-from utils import SORT_ORDER_VALUES, SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE
+from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE
 
 
 def sortVideoFiles(

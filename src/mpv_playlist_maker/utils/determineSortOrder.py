@@ -1,5 +1,5 @@
 import sys
-from utils import SORT_BY_VALUES, SORT_ORDER_VALUES
+from .constants import SORT_BY_VALUES, SORT_ORDER_VALUES
 
 
 def createIndexedOptionsString(options: tuple[str]):
