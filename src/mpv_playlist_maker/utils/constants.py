@@ -3,7 +3,7 @@ from typing import Literal
 READ_JSON_ERROR = "Something went wrong while trying to read the content of: "
 RUNTIME_FILENAME = "mpvpm-runtime.json"
 RUNTIME_JSON_DEFAULT = {
-    "files": [],
+    "videos": [],
     "index": 0,
     "speed": 1.0,
     "fullscreen": True,

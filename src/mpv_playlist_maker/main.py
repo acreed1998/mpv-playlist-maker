@@ -1,5 +1,6 @@
 from utils import (
     determineDirectoryToUse,
+    determineVideosToPlay,
     getRuntimeJSON,
     getVideoFiles,
     determineSortOrder,
@@ -9,13 +10,14 @@ from utils import (
 
 
 def main():
-    runtimeJSON = getRuntimeJSON()
+    videoList, index = determineVideosToPlay()
+    playVideos(videoList, index)
     # directory = determineDirectoryToUse()
     # files = getVideoFiles(directory)
     # sortBy, sortOrder = determineSortOrder()
     # sortedFiles = sortVideoFiles(files, sortBy, sortOrder)
     # playVideos(sortedFiles)
-    print(runtimeJSON)
+    print(videoList)
 
 
 if __name__ == "__main__":
