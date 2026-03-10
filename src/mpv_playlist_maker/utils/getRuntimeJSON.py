@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from .constants import RUNTIME_FILENAME
 from .jsonManipulation import writeJSONToFile, readJSONFromFile
@@ -9,7 +8,7 @@ def getRuntimeJSON():
     cwdRuntimeJSONFilepath = Path(cwd, RUNTIME_FILENAME)
 
     if cwdRuntimeJSONFilepath.exists() == False:
-        cwdRuntimeJSONFilepath.mkdir(parents=True, exist_ok=True)
+        cwdRuntimeJSONFilepath.parent.mkdir(parents=True, exist_ok=True)
         cwdRuntimeJSONFilepath.touch()
         writeJSONToFile(cwdRuntimeJSONFilepath, {})
 

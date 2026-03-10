@@ -10,11 +10,11 @@ from utils import (
 
 def main():
     runtimeJSON = getRuntimeJSON()
-    directory = determineDirectoryToUse()
-    files = getVideoFiles(directory)
-    sortBy, sortOrder = determineSortOrder()
-    sortedFiles = sortVideoFiles(files, sortBy, sortOrder)
-    playVideos(sortedFiles)
+    # directory = determineDirectoryToUse()
+    # files = getVideoFiles(directory)
+    # sortBy, sortOrder = determineSortOrder()
+    # sortedFiles = sortVideoFiles(files, sortBy, sortOrder)
+    # playVideos(sortedFiles)
     print(runtimeJSON)
 
 

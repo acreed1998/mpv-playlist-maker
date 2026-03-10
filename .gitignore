@@ -27,3 +27,4 @@ dist-ssr
 notes.md
 **/__pycache__/
 **/videos/
+**/mpvpm-runtime.json

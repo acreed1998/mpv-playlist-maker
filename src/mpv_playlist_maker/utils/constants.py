@@ -1,5 +1,6 @@
 from typing import Literal
 
+READ_JSON_ERROR = "Something went wrong while trying to read the content of: "
 RUNTIME_FILENAME = "mpvpm-runtime.json"
 
 SORT_BY_VALUES_TYPE = Literal["Random", "Filename", "Folder Structure", "Duration"]
