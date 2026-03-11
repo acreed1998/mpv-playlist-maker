@@ -17,7 +17,7 @@ ENTRY_POINT = "src/mpv_playlist_maker/main.py"   # Path to your entry-point file
 
 if sys.platform.startswith("win"):
     # Path after: choco install mediainfo
-    mediainfo_lib = ("C:/ProgramData/chocolatey/lib/mediainfo/tools/MediaInfo.dll", ".")
+    mediainfo_lib = ("C:/Program Files/MediaInfo/MediaInfo.dll", ".")
 
 elif sys.platform.startswith("darwin"):
     # Path after: brew install mediainfo
