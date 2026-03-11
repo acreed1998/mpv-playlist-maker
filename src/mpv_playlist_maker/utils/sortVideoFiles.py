@@ -3,8 +3,8 @@ import random, subprocess, json
 from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE, GET_DURATION_ERROR
 
 
-def get_duration(path: Path) -> float:
-    pathAsString = str(path)
+def get_duration(filepath: Path) -> float:
+    filepathAsString = str(filepath)
     try:
         result = subprocess.run(
             [
@@ -14,7 +14,7 @@ def get_duration(path: Path) -> float:
                 "-print_format",
                 "json",
                 "-show_format",
-                pathAsString,
+                filepathAsString,
             ],
             capture_output=True,
             text=True,
@@ -23,7 +23,7 @@ def get_duration(path: Path) -> float:
         duration = float(info["format"]["duration"])  # seconds
         return duration
     except:
-        print(f"{GET_DURATION_ERROR}{pathAsString}")
+        print(f"{GET_DURATION_ERROR}{filepathAsString}")
         return 0
 
 
