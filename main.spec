@@ -16,6 +16,7 @@ DATAS = [
 
 # Any packages that PyInstaller misses due to dynamic imports:
 HIDDEN_IMPORTS = [
+  "pymediainfo",
     # "mypackage.plugins",
 ]
 

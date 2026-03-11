@@ -51,6 +51,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyinstaller
 
+      - name: Install MediaInfo native library
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install -y libmediainfo-dev
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            brew install mediainfo
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            choco install mediainfo
+          fi
+
       - name: Build executable
         run: pyinstaller main.spec
 
