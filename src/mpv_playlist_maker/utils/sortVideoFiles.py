@@ -4,7 +4,7 @@ from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE, GET_DURATION
 
 
 def get_duration(path: Path) -> float:
-    pathAsString = str(Path)
+    pathAsString = str(path)
     try:
         result = subprocess.run(
             [
