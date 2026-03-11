@@ -1,14 +1,13 @@
 from pathlib import Path
 import random
-from pymediainfo import MediaInfo
+from moviepy import VideoFileClip
 from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE
 
 
 def get_duration(path: Path) -> float:
-    info = MediaInfo.parse(path)
-    videoTrack = info.video_tracks[0]
-    trackDuration: int = videoTrack.duration  # duration is in milliseconds
-    return float(trackDuration)
+    clip = VideoFileClip(str(path))
+    duration: int = clip.duration
+    return duration
 
 
 def sortVideoFiles(
