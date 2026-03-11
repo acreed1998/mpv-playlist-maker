@@ -2,14 +2,40 @@
 # PyInstaller spec file for a src-layout Python package.
 # Adjust the variables in the CONFIG section to match your project.
 
+import sys
+import os
+
 # ─── CONFIG ───────────────────────────────────────────────────────────────────
 
 APP_NAME   = "mpv_playlist_maker"          # Name of the output executable
 ENTRY_POINT = "src/mpv_playlist_maker/main.py"   # Path to your entry-point file (the one with main() / __main__)
 
+# ─── MEDIAINFO LIBRARY BUNDLING ───────────────────────────────────────────────
+# Detects the current OS and points to the native MediaInfo library installed
+# by the GitHub Actions workflow (or your local machine).
+# The library is bundled into the executable root (".") so pymediainfo can find it.
+
+if sys.platform.startswith("win"):
+    # Path after: choco install mediainfo
+    mediainfo_lib = ("C:/ProgramData/chocolatey/lib/mediainfo/tools/MediaInfo.dll", ".")
+
+elif sys.platform.startswith("darwin"):
+    # Path after: brew install mediainfo
+    # Handles both Apple Silicon (/opt/homebrew) and Intel (/usr/local) Macs
+    arm_path   = "/opt/homebrew/lib/libmediainfo.dylib"
+    intel_path = "/usr/local/lib/libmediainfo.dylib"
+    resolved   = arm_path if os.path.exists(arm_path) else intel_path
+    mediainfo_lib = (resolved, ".")
+
+else:
+    # Path after: apt-get install libmediainfo-dev (Linux)
+    mediainfo_lib = ("/usr/lib/x86_64-linux-gnu/libmediainfo.so.0", ".")
+
+# ─── DATA FILES ───────────────────────────────────────────────────────────────
 # Any non-Python data files you want to bundle (uncomment and edit if needed):
 # Format: (source_path, destination_folder_inside_bundle)
 DATAS = [
+    mediainfo_lib,
     # ("src/mypackage/data/config.json", "mypackage/data"),
     # ("src/mypackage/assets/",          "mypackage/assets"),
 ]
