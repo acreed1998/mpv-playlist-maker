@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-import os
 from .constants import READ_JSON_ERROR, WRITE_JSON_ERROR
 
 
