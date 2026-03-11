@@ -1,5 +1,7 @@
 from typing import Literal
 
+GET_DURATION_ERROR = "Something went wrong while trying to get the duration of the following video file:\n"
+
 READ_JSON_ERROR = "Something went wrong while trying to read the content of: "
 RUNTIME_FILENAME = "mpvpm-runtime.json"
 RUNTIME_JSON_DEFAULT = {

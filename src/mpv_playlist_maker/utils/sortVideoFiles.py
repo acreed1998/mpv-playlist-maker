@@ -1,17 +1,30 @@
 from pathlib import Path
 import random, subprocess, json
-from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE
+from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE, GET_DURATION_ERROR
 
 
 def get_duration(path: Path) -> float:
-    result = subprocess.run(
-        ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", str(path)],
-        capture_output=True,
-        text=True,
-    )
-    info = json.loads(result.stdout)
-    duration = float(info["format"]["duration"])  # seconds
-    return duration
+    pathAsString = str(Path)
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v",
+                "quiet",
+                "-print_format",
+                "json",
+                "-show_format",
+                pathAsString,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        info = json.loads(result.stdout)
+        duration = float(info["format"]["duration"])  # seconds
+        return duration
+    except:
+        print(f"{GET_DURATION_ERROR}{pathAsString}")
+        return 0
 
 
 def sortVideoFiles(
