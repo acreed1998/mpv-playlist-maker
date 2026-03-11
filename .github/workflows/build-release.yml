@@ -66,8 +66,8 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Get-ChildItem -Path "C:\ProgramData\chocolatey" -Recurse -Filter "*.dll" |
-            Where-Object { $_.Name -like "*mediainfo*" -or $_.Name -like "*MediaInfo*" } |
+          Get-ChildItem -Path "C:\" -Recurse -Filter "*.dll" -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -match "mediainfo" } |
             Select-Object FullName
 
       - name: Build executable
