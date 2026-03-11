@@ -21,7 +21,7 @@ def determineVideosToPlay():
         videoList = sortVideoFiles(videoList, sortBy, sortOrder)
         index = 0
         videoListWithStrings = [str(video) for video in videoList]
-        runtimeData.update({"videos": videoListWithStrings})
+        runtimeData.update({"videos": videoListWithStrings, "index": index})
 
         runtimePath = getRuntimePath()
         writeJSONToFile(runtimePath, runtimeData)

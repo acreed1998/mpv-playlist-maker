@@ -11,7 +11,7 @@ from utils import (
 
 def main():
     videoList, index = determineVideosToPlay()
-    playVideos(videoList, index)
+    # playVideos(videoList, index)
     # directory = determineDirectoryToUse()
     # files = getVideoFiles(directory)
     # sortBy, sortOrder = determineSortOrder()
