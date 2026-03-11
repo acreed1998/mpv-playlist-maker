@@ -62,14 +62,6 @@ jobs:
             choco install mediainfo
           fi
 
-      - name: Find MediaInfo DLL location (Windows debug)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          Get-ChildItem -Path "C:\" -Recurse -Filter "*.dll" -ErrorAction SilentlyContinue |
-            Where-Object { $_.FullName -match "mediainfo" } |
-            Select-Object FullName
-
       - name: Build executable
         run: pyinstaller main.spec
 
