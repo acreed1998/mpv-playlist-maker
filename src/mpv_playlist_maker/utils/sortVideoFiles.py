@@ -1,12 +1,16 @@
 from pathlib import Path
-import random
-from moviepy import VideoFileClip
+import random, subprocess, json
 from .constants import SORT_ORDER_VALUES_TYPE, SORT_BY_VALUES_TYPE
 
 
 def get_duration(path: Path) -> float:
-    clip = VideoFileClip(str(path))
-    duration: int = clip.duration
+    result = subprocess.run(
+        ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", str(path)],
+        capture_output=True,
+        text=True,
+    )
+    info = json.loads(result.stdout)
+    duration = float(info["format"]["duration"])  # seconds
     return duration
 
 
