@@ -9,7 +9,8 @@ def playVideos(files: list[Path], index: int):
     for file in files:
         runtimeData = getRuntimeJSON()
         fullscreenArgument = "--fullscreen" if runtimeData["fullscreen"] == True else ""
-        subprocess.run(["mpv", fullscreenArgument, "--keep-open=no", str(file)])
+        speedArgument = f"--speed={runtimeData['speed']}"
+        subprocess.run(["mpv", fullscreenArgument, speedArgument, "--keep-open=no", str(file)])
 
         idx = idx + 1
 
