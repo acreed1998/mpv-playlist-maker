@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 import os
-from .constants import READ_JSON_ERROR
+from .constants import READ_JSON_ERROR, WRITE_JSON_ERROR
 
 
 def readJSONFromFile(filepath: Path):
@@ -20,4 +20,5 @@ def writeJSONToFile(filepath: Path, content):
             json.dump(content, file, indent=2)
             return filepath
     except:
+        print(f"{WRITE_JSON_ERROR}{str(filepath)}")
         return None

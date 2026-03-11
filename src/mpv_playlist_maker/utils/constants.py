@@ -2,7 +2,7 @@ from typing import Literal
 
 GET_DURATION_ERROR = "Something went wrong while trying to get the duration of the following video file:\n"
 
-READ_JSON_ERROR = "Something went wrong while trying to read the content of: "
+READ_JSON_ERROR = "Something went wrong while trying to read the JSON content of: "
 RUNTIME_FILENAME = "mpvpm-runtime.json"
 RUNTIME_JSON_DEFAULT = {
     "videos": [],
@@ -68,3 +68,5 @@ VIDEO_FILE_EXTENSIONS = (
     ".h265",
     ".hevc",
 )
+
+WRITE_JSON_ERROR = "Something went wrong while trying to write to the following JSON file:\n"
