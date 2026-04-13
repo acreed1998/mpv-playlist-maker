@@ -18,17 +18,50 @@ permissions:
   contents: write # Required to create a GitHub Release and upload assets
 
 jobs:
-  build:
+  # ── Linux (Ubuntu 20.04 container for glibc 2.31 compatibility) ──────────────
+  build-linux:
+    name: Build on Linux
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            python3 \
+            python3-pip \
+            python3-dev \
+            binutils
+
+      - name: Install Python dependencies
+        run: |
+          pip3 install pyinstaller
+          pip3 install -r requirements.txt
+
+      - name: Build executable
+        run: pyinstaller main.spec
+
+      - name: Rename executable for upload
+        run: mv dist/mpv_playlist_maker mpv_playlist_maker-linux
+
+      - name: Upload executable to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mpv_playlist_maker-linux
+
+  # ── Windows & macOS (use hosted runners as before) ───────────────────────────
+  build-other:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
-            artifact_name: mpv_playlist_maker-linux
-            executable: dist/mpv_playlist_maker
-
           - os: windows-latest
             artifact_name: mpv_playlist_maker-windows.exe
             executable: dist/mpv_playlist_maker.exe
@@ -50,7 +83,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
-          pip install nuitka
 
       - name: Build executable
         run: pyinstaller main.spec
