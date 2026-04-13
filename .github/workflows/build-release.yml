@@ -41,7 +41,6 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip3 install pyinstaller
-          pip3 install -r requirements.txt
 
       - name: Build executable
         run: pyinstaller main.spec
