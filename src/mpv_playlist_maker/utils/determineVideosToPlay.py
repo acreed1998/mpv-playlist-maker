@@ -9,14 +9,14 @@ from .sortVideoFiles import sortVideoFiles
 
 def determineVideosToPlay():
     runtimeData = getRuntimeJSON()
-    videoList: list[str] = runtimeData["videos"]
+    videoList = runtimeData["videos"]
     index: int = runtimeData["index"]
 
     videoListLength = len(videoList)
 
     if (videoListLength < 1) or (videoListLength == (index)):
         videoDirectory = determineDirectoryToUse()
-        videoList: list[Path] = getVideoFiles(videoDirectory)
+        videoList = getVideoFiles(videoDirectory)
         sortBy, sortOrder = determineSortOrder()
         videoList = sortVideoFiles(videoList, sortBy, sortOrder)
         index = 0
@@ -26,7 +26,7 @@ def determineVideosToPlay():
         runtimePath = getRuntimePath()
         writeJSONToFile(runtimePath, runtimeData)
     else:
-        videoList: list[Path] = [Path(videoPath) for videoPath in videoList]
+        videoList = [Path(videoPath) for videoPath in videoList]
 
     videoList = videoList[index:]
     return videoList, index

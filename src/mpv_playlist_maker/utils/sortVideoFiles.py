@@ -28,7 +28,7 @@ def get_duration(filepath: Path) -> float:
 
 
 def sortVideoFiles(
-    files: list[Path],
+    files,
     sortBy: SORT_BY_VALUES_TYPE,
     sortOrder: SORT_ORDER_VALUES_TYPE | None,
 ):

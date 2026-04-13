@@ -4,7 +4,7 @@ from .getRuntimeJSON import getRuntimePath, getRuntimeJSON
 from .jsonManipulation import writeJSONToFile
 
 
-def playVideos(files: list[Path], index: int):
+def playVideos(files, index: int):
     idx = index
     for file in files:
         runtimeData = getRuntimeJSON()
