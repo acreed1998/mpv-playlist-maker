@@ -2,7 +2,7 @@ import sys
 from .constants import SORT_BY_VALUES, SORT_ORDER_VALUES
 
 
-def createIndexedOptionsString(options: tuple[str]):
+def createIndexedOptionsString(options):
     accumulator = ""
     for index, option in enumerate(options):
         indexAndOption = f"[{index}]: {option} | "
