@@ -4,7 +4,7 @@ import subprocess
 import platform
 
 
-def _clean_env(env: dict) -> dict:
+def _clean_env(env: dict):
     """Remove Snap-injected library paths that conflict with system binaries."""
     cleaned = env.copy()
     for var in ("LD_LIBRARY_PATH", "LD_PRELOAD"):
@@ -17,7 +17,7 @@ def _clean_env(env: dict) -> dict:
     return cleaned
 
 
-def _get_cmd() -> list[str]:
+def _get_cmd():
     """
     Return the correct command to relaunch the current process.
     Handles both frozen executables (PyInstaller) and normal Python scripts.
