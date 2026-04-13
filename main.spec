@@ -4,6 +4,7 @@
 
 import sys
 import os
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
 # ─── CONFIG ───────────────────────────────────────────────────────────────────
 
@@ -36,7 +37,22 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        'tkinter',
+        'unittest',
+        'email',
+        'html',
+        'http',
+        'xml',
+        'pydoc',
+        'doctest',
+        'argparse',
+        'difflib',
+        'inspect',
+        'ast',
+        'dis',
+        'pickle',
+    ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -55,7 +71,7 @@ exe = EXE(
     name=APP_NAME,
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
+    strip=True,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
@@ -64,4 +80,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    onefile=True
 )
