@@ -4,8 +4,7 @@ import subprocess
 import platform
 
 
-def _clean_env(env: dict):
-    """Remove Snap-injected library paths that conflict with system binaries."""
+def cleanLinuxENV(env: dict):
     cleaned = env.copy()
     for var in ("LD_LIBRARY_PATH", "LD_PRELOAD"):
         original = cleaned.get(var, "")
@@ -17,11 +16,7 @@ def _clean_env(env: dict):
     return cleaned
 
 
-def _get_cmd():
-    """
-    Return the correct command to relaunch the current process.
-    Handles both frozen executables (PyInstaller) and normal Python scripts.
-    """
+def getCmd():
     if getattr(sys, "frozen", False):
         # Running as a PyInstaller-built executable
         executable = os.path.abspath(sys.executable)
@@ -38,7 +33,7 @@ def launchInTerminal():
 
     system = platform.system()
     env = {**os.environ, "LAUNCHED_IN_TERMINAL": "1"}
-    cmd = _get_cmd()
+    cmd = getCmd()
 
     if system == "Windows":
         subprocess.Popen(["cmd", "/c", "start", "cmd", "/c", *cmd], env=env)
@@ -49,7 +44,7 @@ def launchInTerminal():
         subprocess.Popen(["osascript", "-e", apple_script])
 
     elif system == "Linux":
-        env = _clean_env(env)
+        env = cleanLinuxENV(env)
         terminals = [
             ["gnome-terminal", "--", *cmd],
             ["konsole", "-e", *cmd],
