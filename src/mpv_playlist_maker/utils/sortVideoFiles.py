@@ -30,7 +30,7 @@ def get_duration(filepath: Path) -> float:
 def sortVideoFiles(
     files,
     sortBy: SORT_BY_VALUES_TYPE,
-    sortOrder: SORT_ORDER_VALUES_TYPE | None,
+    sortOrder: SORT_ORDER_VALUES_TYPE,
 ):
     sortedFiles = files
     isAscending = sortOrder == "Ascending"

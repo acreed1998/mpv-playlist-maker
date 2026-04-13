@@ -19,5 +19,5 @@ def getRuntimeJSON():
 
     # TODO: Detemine what to do if/when failed reading from
     # runtime file other than returning None
-    runtimeData: dict | None = readJSONFromFile(cwdRuntimeJSONFilepath)
+    runtimeData: dict = readJSONFromFile(cwdRuntimeJSONFilepath)
     return runtimeData
