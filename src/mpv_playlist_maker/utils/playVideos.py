@@ -1,4 +1,5 @@
 import subprocess
+import os
 from pathlib import Path
 from .getRuntimeJSON import getRuntimePath, getRuntimeJSON
 from .jsonManipulation import writeJSONToFile
@@ -15,8 +16,13 @@ def playVideos(files, index: int):
         speedArgument = f"--speed={runtimeData['speed']}"
 
         print(f"📽️ Now playing video {idx} of {totalNumberOfVideos}: {file.name} 🍿")
-        subprocess.run(["mpv", fullscreenArgument, speedArgument, "--keep-open=no", str(file)])
-        print(f"🏁 Finished playing video {idx} of {totalNumberOfVideos}: {file.name} 🏁")
+        subprocess.Popen(
+            ["mpv", fullscreenArgument, speedArgument, "--keep-open=no", str(file)],
+            env=os.environ.copy(),
+        ).wait()
+        print(
+            f"🏁 Finished playing video {idx} of {totalNumberOfVideos}: {file.name} 🏁"
+        )
 
         runtimeFilepath = getRuntimePath()
         runtimeData.update({"index": idx})
