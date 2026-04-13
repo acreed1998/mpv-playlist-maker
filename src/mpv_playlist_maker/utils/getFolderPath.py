@@ -5,16 +5,7 @@ from pathlib import Path
 
 
 def getFolderPath():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "folder", nargs="?", help="Path to the folder containing video files"
-    )
-    args = parser.parse_args()
-
-    directoryPath: str = (
-        args.folder
-        or input("Enter folder path for directory containing video files: ").strip()
-    )
+    directoryPath = input("Enter folder path for directory containing video files: ").strip()
 
     if os.path.isdir(directoryPath):
         path = Path(directoryPath)
