@@ -36,7 +36,8 @@ def launchInTerminal():
     cmd = getCmd()
 
     if system == "Windows":
-        subprocess.Popen(["cmd", "/c", "start", "cmd", "/c", *cmd], env=env)
+        safe_cmd = subprocess.list2cmdline(cmd)
+        subprocess.Popen(f'start "" {safe_cmd}', shell=True, env=env)
 
     elif system == "Darwin":  # macOS
         escaped = " ".join(f'"{c}"' for c in cmd)
