@@ -1,60 +1,17 @@
-import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
-from pathlib import Path
-import sys
-import os
 import threading
-
-# Add src to path to import utils
-sys.path.insert(0, str(Path(__file__).parent))
+import tkinter as tk
+from pathlib import Path
+from tkinter import filedialog, messagebox, ttk
 
 from utils.getVideoFiles import getVideoFiles
-from utils.sortVideoFiles import sortVideoFiles
-from utils.playVideos import playVideos
 from utils.getRuntimeJSON import getRuntimeJSON, getRuntimePath
 from utils.jsonManipulation import writeJSONToFile
+from utils.playVideos import playVideos
+from utils.sortVideoFiles import sortVideoFiles
 
-
-def get_saved_playlist_data():
-    runtime_data = getRuntimeJSON()
-    if not runtime_data or not isinstance(runtime_data, dict):
-        return None, None
-
-    videos = runtime_data.get("videos")
-    index = runtime_data.get("index")
-
-    if not isinstance(videos, list) or not isinstance(index, int):
-        return None, None
-
-    if index < 0 or index >= len(videos):
-        return None, None
-
-    current_video_path = Path(videos[index])
-    if not current_video_path.exists():
-        return None, None
-
-    return videos, index
-
-
-def ask_to_resume_saved_playlist(root):
-    videos, index = get_saved_playlist_data()
-    if videos is None:
-        return False, None, None
-
-    title = "Resume saved playlist?"
-    message = (
-        f"A saved playlist was found, and playback stopped at video {index + 1} of {len(videos)}.\n\n"
-        "Would you like to continue playing from that point?"
-    )
-    answer = messagebox.askyesno(title, message, parent=root)
-    return answer, videos, index
-
-
-ACCENT_COLOR = "#5c6bc0"
-BACKGROUND_COLOR = "#f4f6fb"
-FOREGROUND_COLOR = "#202124"
-SECONDARY_COLOR = "#5f6368"
-CARD_COLOR = "#ffffff"
+from .constants import ACCENT_COLOR, BACKGROUND_COLOR, FOREGROUND_COLOR, SECONDARY_COLOR
+from .saved_playlist import get_saved_playlist_data
+from .styles import configure_style
 
 
 class VideoPlayerGUI:
@@ -66,7 +23,7 @@ class VideoPlayerGUI:
         self.root.configure(bg=BACKGROUND_COLOR)
         self.folders = []
 
-        self.configure_style()
+        configure_style(root)
 
         title_label = ttk.Label(root, text="MPV Playlist Maker", style="Header.TLabel")
         title_label.pack(pady=(18, 2))
@@ -144,7 +101,6 @@ class VideoPlayerGUI:
             style="TCombobox",
         )
         self.sort_order_combo.grid(row=2, column=1, sticky="ew", padx=(12, 0), pady=6)
-
         self.sort_frame.columnconfigure(1, weight=1)
 
         self.start_btn = ttk.Button(root, text="Play Videos", command=self.start_playing, style="Accent.TButton")
@@ -152,26 +108,6 @@ class VideoPlayerGUI:
 
         self.update_saved_playlist_status()
         root.bind("<Return>", lambda event: self.start_playing())
-
-    def configure_style(self):
-        style = ttk.Style(self.root)
-        style.theme_use("clam")
-        style.configure("TFrame", background=BACKGROUND_COLOR)
-        style.configure("Card.TFrame", background=CARD_COLOR, relief="flat")
-        style.configure("TLabel", background=BACKGROUND_COLOR, foreground=FOREGROUND_COLOR, font=("Segoe UI", 10))
-        style.configure("Header.TLabel", font=("Segoe UI", 16, "bold"), foreground=FOREGROUND_COLOR)
-        style.configure("SubHeader.TLabel", font=("Segoe UI", 10), foreground=SECONDARY_COLOR)
-        style.configure("Section.TLabel", font=("Segoe UI", 11, "bold"), foreground=FOREGROUND_COLOR)
-        style.configure("Label.TLabel", font=("Segoe UI", 10), foreground=FOREGROUND_COLOR)
-        style.configure("Accent.TButton", foreground="#ffffff", background=ACCENT_COLOR, font=("Segoe UI", 10, "bold"), padding=10)
-        style.map(
-            "Accent.TButton",
-            background=[("active", "#3f51b5")],
-            foreground=[("disabled", "#d1d1d1")],
-        )
-        style.configure("Secondary.TButton", foreground=FOREGROUND_COLOR, background="#ffffff", font=("Segoe UI", 10, "bold"), padding=10)
-        style.map("Secondary.TButton", background=[("active", "#e8eaf6")])
-        style.configure("TCombobox", fieldbackground="#ffffff", background="#ffffff", foreground=FOREGROUND_COLOR, padding=8)
 
     def build_saved_playlist_card(self, parent):
         self.resume_frame = ttk.Frame(parent, style="Card.TFrame", padding=16)
@@ -221,7 +157,11 @@ class VideoPlayerGUI:
 
         self.start_btn.config(state="disabled")
         self.resume_button.config(state="disabled")
-        thread = threading.Thread(target=self.play_videos, args=([Path(video_path) for video_path in videos], index), daemon=True)
+        thread = threading.Thread(
+            target=self.play_videos,
+            args=([Path(p) for p in videos], index),
+            daemon=True,
+        )
         thread.start()
 
     def update_video_count(self):
@@ -229,10 +169,7 @@ class VideoPlayerGUI:
             self.video_count_label.config(text="No folders selected yet.")
             return
 
-        total_videos = 0
-        for folder in self.folders:
-            total_videos += len(getVideoFiles(Path(folder)))
-
+        total_videos = sum(len(getVideoFiles(Path(f))) for f in self.folders)
         self.video_count_label.config(
             text=f"{len(self.folders)} folder(s) selected · {total_videos} video(s) found"
         )
@@ -260,11 +197,7 @@ class VideoPlayerGUI:
         sort_by = self.sort_by_var.get()
         sort_order = self.sort_order_var.get() if sort_by != "Random" else None
 
-        all_videos = []
-        for folder in self.folders:
-            videos = getVideoFiles(Path(folder))
-            all_videos.extend(videos)
-
+        all_videos = [v for folder in self.folders for v in getVideoFiles(Path(folder))]
         if not all_videos:
             messagebox.showerror("Error", "No video files found in selected folders.")
             return
@@ -272,35 +205,18 @@ class VideoPlayerGUI:
         sorted_videos = sortVideoFiles(all_videos, sort_by, sort_order)
 
         runtime_data = getRuntimeJSON()
-        video_list_strings = [str(v) for v in sorted_videos]
-        runtime_data.update({"videos": video_list_strings, "index": 0})
-        runtime_path = getRuntimePath()
-        writeJSONToFile(runtime_path, runtime_data)
+        runtime_data.update({"videos": [str(v) for v in sorted_videos], "index": 0})
+        writeJSONToFile(getRuntimePath(), runtime_data)
 
         self.start_btn.config(state="disabled")
         thread = threading.Thread(target=self.play_videos, args=(sorted_videos,), daemon=True)
         thread.start()
 
-    def play_videos(self, videos):
+    def play_videos(self, videos, start_index=0):
         try:
-            playVideos(videos, 0)
+            playVideos(videos, start_index)
             messagebox.showinfo("Done", "All videos played.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to play videos: {str(e)}")
         finally:
             self.start_btn.config(state="normal")
-
-
-if __name__ == "__main__":
-    print("Starting GUI")
-    root = tk.Tk()
-    root.withdraw()
-
-    resume, videos, index = ask_to_resume_saved_playlist(root)
-    if resume:
-        root.destroy()
-        playVideos([Path(video_path) for video_path in videos], index)
-    else:
-        root.deiconify()
-        app = VideoPlayerGUI(root)
-        root.mainloop()
