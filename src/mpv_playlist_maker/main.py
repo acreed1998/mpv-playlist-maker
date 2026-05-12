@@ -4,11 +4,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
+from utils.checkDependencies import check_dependencies
 from utils.playVideos import playVideos
 from gui import VideoPlayerGUI, ask_to_resume_saved_playlist
 
 
 if __name__ == "__main__":
+    check_dependencies()
+
     print("Starting GUI")
     root = tk.Tk()
     root.withdraw()
