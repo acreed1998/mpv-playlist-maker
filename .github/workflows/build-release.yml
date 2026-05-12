@@ -29,17 +29,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Python 3.11
-        run: |
-          yum install -y python3.11 python3.11-devel
-
       - name: Install PyInstaller
         run: |
-          /usr/local/bin/python3.11 -m pip install --upgrade pip
-          /usr/local/bin/python3.11 -m pip install pyinstaller
+          /opt/python/cp311-cp311/bin/python3.11 -m pip install --upgrade pip
+          /opt/python/cp311-cp311/bin/python3.11 -m pip install pyinstaller
 
       - name: Build executable
-        run: /usr/local/bin/python3.11 -m PyInstaller main.spec
+        run: /opt/python/cp311-cp311/bin/python3.11 -m PyInstaller main.spec
 
       - name: Rename executable for upload
         run: mv dist/mpv_playlist_maker mpv_playlist_maker-linux
