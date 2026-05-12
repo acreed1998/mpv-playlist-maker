@@ -18,24 +18,32 @@ permissions:
   contents: write # Required to create a GitHub Release and upload assets
 
 jobs:
-  # ── Linux (manylinux_2_28 for broad glibc compatibility) ──────────────────
+  # ── Linux (Ubuntu 22.04 for GLIBC 2.35 compatibility) ─────────────────────
   build-linux:
     name: Build on Linux
     runs-on: ubuntu-latest
     container:
-      image: quay.io/pypa/manylinux_2_28_x86_64:latest
+      image: ubuntu:22.04
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            python3.11 \
+            python3.11-dev \
+            python3-pip
+
       - name: Install PyInstaller
         run: |
-          /opt/python/cp311-cp311/bin/python3.11 -m pip install --upgrade pip
-          /opt/python/cp311-cp311/bin/python3.11 -m pip install pyinstaller
+          python3.11 -m pip install --upgrade pip
+          python3.11 -m pip install pyinstaller
 
       - name: Build executable
-        run: /opt/python/cp311-cp311/bin/python3.11 -m PyInstaller main.spec
+        run: python3.11 -m PyInstaller main.spec
 
       - name: Rename executable for upload
         run: mv dist/mpv_playlist_maker mpv_playlist_maker-linux
