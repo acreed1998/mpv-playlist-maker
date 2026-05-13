@@ -157,6 +157,7 @@ class VideoPlayerGUI:
 
         self.start_btn.config(state="disabled")
         self.resume_button.config(state="disabled")
+
         thread = threading.Thread(
             target=self.play_videos,
             args=([Path(p) for p in videos], index),

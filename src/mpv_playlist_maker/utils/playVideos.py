@@ -5,9 +5,11 @@ from .getRuntimeJSON import getRuntimePath, getRuntimeJSON
 from .jsonManipulation import writeJSONToFile
 
 
-def playVideos(files, index: int):
-    idx = index
-    for file in files:
+def playVideos(files, startingIndex: int):
+    idx = startingIndex
+
+    filepathsFromIndex = files[startingIndex:]
+    for file in filepathsFromIndex:
         runtimeData = getRuntimeJSON()
         totalNumberOfVideos = len(runtimeData["videos"])
         idx = idx + 1
